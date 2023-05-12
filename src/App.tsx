@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import "./App.css";
 
 const getRandomNumberFromApi = async (): Promise<number> => {
@@ -12,33 +12,19 @@ const getRandomNumberFromApi = async (): Promise<number> => {
 };
 
 export const App = () => {
-	const [number, setNumber] = useState<number>();
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string>("");
-	const [key, forRefresh] = useReducer((x) => Number(x) + 1, 0);
-
-	useEffect(() => {
-		setIsLoading(true);
-		getRandomNumberFromApi()
-			.then(setNumber)
-			.catch((err) => setError(err.message));
-	}, [key]);
-
-	useEffect(() => {
-		if (number) setIsLoading(false);
-	}, [number]);
-
-	useEffect(() => {
-		if (error) setIsLoading(false);
-	}, [error]);
+	const query = useQuery(["randomNumber"], getRandomNumberFromApi);
 
 	return (
 		<div className='App App-header'>
-			{isLoading ? <h2>Loading...</h2> : <h2>Número aleatorio: {number}</h2>}
-			{!isLoading && error && <h3>{error}</h3>}
+			{query.isFetching ? (
+				<h2>Loading...</h2>
+			) : (
+				<h2>Número aleatorio: {query.data}</h2>
+			)}
+			{!query.isLoading && query.isError && <h3>{`${query.error}`}</h3>}
 
-			<button onClick={forRefresh} disabled={isLoading}>
-				{isLoading ? "..." : "New number"}
+			<button onClick={() => query.refetch()} disabled={query.isFetching}>
+				{query.isFetching ? "..." : "New number"}
 			</button>
 		</div>
 	);
