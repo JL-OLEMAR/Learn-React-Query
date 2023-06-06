@@ -33,11 +33,11 @@ export const App = () => {
 	}, [error]);
 
 	return (
-		<div className='App App-header'>
+		<div className="App App-header">
 			{isLoading ? <h2>Loading...</h2> : <h2>Número aleatorio: {number}</h2>}
 			{!isLoading && error && <h3>{error}</h3>}
 
-			<button onClick={forRefresh} disabled={isLoading}>
+			<button onClick={forRefresh} disabled={isLoading} type="submit">
 				{isLoading ? "..." : "New number"}
 			</button>
 		</div>

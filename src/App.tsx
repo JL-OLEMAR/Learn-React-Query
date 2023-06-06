@@ -15,7 +15,7 @@ export const App = () => {
 	const query = useQuery(["randomNumber"], getRandomNumberFromApi);
 
 	return (
-		<div className='App App-header'>
+		<div className="App App-header">
 			{query.isFetching ? (
 				<h2>Loading...</h2>
 			) : (
@@ -23,7 +23,11 @@ export const App = () => {
 			)}
 			{!query.isLoading && query.isError && <h3>{`${query.error}`}</h3>}
 
-			<button onClick={() => query.refetch()} disabled={query.isFetching}>
+			<button
+				onClick={() => query.refetch()}
+				disabled={query.isFetching}
+				type="submit"
+			>
 				{query.isFetching ? "..." : "New number"}
 			</button>
 		</div>
